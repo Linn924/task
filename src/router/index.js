@@ -9,7 +9,7 @@ Vue.use(VueRouter)
     { path: '/login',component: Login },
   
 ]
-
+  
 const router = new VueRouter({
   routes
 })
