@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <el-button>提交</el-button>
+    <el-button>提交1</el-button>
   </div>
 </template>
 
