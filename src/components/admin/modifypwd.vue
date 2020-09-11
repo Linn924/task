@@ -49,8 +49,22 @@ export default {
         }
     },
     methods:{
-        modifypwd(){
-
+        async modifypwd(){
+            const id = window.sessionStorage.getItem('id')
+            this.$refs.pwdFormRef.validate( async valid => {
+                if(!valid) return
+                const {data:res} = await this.$http.get('/modifypwd',{
+                    params:{
+                        id:id,
+                        password:this.pwdForm.password
+                    }
+                })
+                if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})
+                this.$message({message: `${res.tips}`,type: 'success',duration:1000})
+                //表单置空
+                this.$refs.pwdFormRef.resetFields()
+             })
+            
         }
     }
 }

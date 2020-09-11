@@ -42,8 +42,17 @@ export default {
         }
     },
     methods:{
-        addnews(){
-
+        async addnews(){
+            const {data:res} = await this.$http.post('/addnews',this.newsForm)
+            if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})
+            this.$message({message: `${res.tips}`,type: 'success',duration:1000})
+            //表单置空
+            this.newsForm = {
+                title:'',
+                content:'',
+                publishtime:'',
+                author:''
+            }
         }
     }
 }

@@ -28,6 +28,9 @@
                     <el-menu-item index="4-1"><router-link to="/allnews">查看新闻</router-link></el-menu-item>
                     <el-menu-item index="4-2"><router-link to="/addnews">推送新闻</router-link></el-menu-item>
                 </el-submenu>
+                <el-menu-item index="5">
+                  <router-link to="/me"><i class="el-icon-user"></i>个人信息</router-link>
+                </el-menu-item>
               </el-menu>
             </el-aside>
             <el-main>
@@ -46,7 +49,7 @@ export default {
     }
   },
   created(){
-    console.log(window.sessionStorage.getItem('id'))
+    // console.log(window.sessionStorage.getItem('id'))
   }
 }
 </script>

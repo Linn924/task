@@ -57,13 +57,7 @@ export default {
         async login(){
              this.$refs.loginFormRef.validate( async valid => {
                 if(!valid) return
-                const {data:res} = await this.$http.get('/login',{
-                    params:{
-                        username:this.loginForm.username,
-                        password:this.loginForm.password,
-                        identity:this.loginForm.radio
-                    }
-                })
+                const {data:res} = await this.$http.get('/login',{params:this.loginForm})
                 if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})
                 window.sessionStorage.setItem('id',res.id)
                 if(this.loginForm.radio === '1'){
@@ -73,6 +67,7 @@ export default {
                 }
                 //表单置空
                 this.$refs.loginFormRef.resetFields()
+                this.$message({message: `${res.tips}`,type: 'success',duration:1000})
              })
         },
     },
