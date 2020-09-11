@@ -19,12 +19,25 @@
             </el-row>
 
             <!-- 表格中的数据 -->
-            <el-table border stripe>
+            <el-table border stripe :data="transactionArr">
                 <el-table-column label="#" type="index"></el-table-column>
-                <el-table-column label="fromname"></el-table-column>
-                <el-table-column label="toname"></el-table-column>
-                <el-table-column label="time"></el-table-column>
-                <el-table-column label="state"></el-table-column>
+                <el-table-column prop="money" label="金额"></el-table-column>
+                <el-table-column prop="state" label="交易类型">
+                    <template slot-scope="scope">
+                        {{scope.row.state | toMystate}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="toname" label="转账用户">
+                    <template slot-scope="scope">
+                        {{scope.row.toname | toName}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="time" label="日期">
+                    <template slot-scope="scope">
+                        {{scope.row.time | toMydate}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="balance" label="余额"></el-table-column>
             </el-table>
 
             <!-- 分页区域-->
@@ -42,8 +55,47 @@
 export default {
     data(){
         return {
-
+            transactionArr:[]
         }
+    },
+    filters: {
+        toMydate: function (value) {
+            if (!value) return ''
+            return (new Date(value)).toLocaleString()
+        },
+        toMystate: function (value ){
+            if (!value) return ''
+            let state = ''
+            if(value==0){
+                state = '存款'
+            }else if(value==1){
+                state = '取款'
+            }else{
+                state = '转账'
+            }
+            return state
+        },
+        toName: function(value) {
+            if (!value) return '-'
+        }
+    },
+    methods:{
+        async getTransaction(){
+            try {
+                let {data:res} = await axios.get(`/getusertransaction/${this.id}`)
+                if(res.code!==200){
+                    this.$message.error('获取交易记录失败');
+                }
+                this.transactionArr = res.rs
+            } catch(err) {
+                this.$message.error('获取交易记录失败');
+            }
+        }
+    },
+    created(){
+        let id= window.sessionStorage.getItem("id")
+        this.id = id    
+        this.getTransaction()
     }
 }
 </script>

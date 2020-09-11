@@ -22,13 +22,32 @@
 export default {
     data(){
         return {
-            form:{}
+            form:{},
+            id:0,
         }
     },
     methods:{
-        onSubmit(){
-            
+        async onSubmit(){
+            let data = {}
+            data.id = this.id
+            data.money = this.form.money
+
+            try {
+                let {data:res} = await axios.post('/save',data)
+                if(res.code===200){
+                    this.$message.success('存款成功');
+                    this.form = {}
+                }else{
+                    this.$message.error('存款失败');
+                }
+            } catch(err) {
+                this.$message.error('存款失败');
+            }
         }
+    },
+    created(){
+        let id= window.sessionStorage.getItem("id")
+        this.id = id    
     }
 }
 </script>

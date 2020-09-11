@@ -22,13 +22,32 @@
 export default {
     data(){
         return {
-            form:{}
+            form:{},
+            id:0,
         }
     },
     methods:{
-        onSubmit(){
-            
+        async onSubmit(){
+            let data = {}
+            data.id = this.id
+            data.money = this.form.money
+
+            try {
+                let {data:res} = await axios.post('/withdrawal',data)
+                if(res.code===200){
+                    this.$message.success('取款成功');
+                }else{
+                    this.$message.error('取款失败');
+                }
+                this.form = {}
+            } catch(err) {
+                this.$message.error('取款失败');
+            }
         }
+    },
+    created(){
+        let id= window.sessionStorage.getItem("id")
+        this.id = id    
     }
 }
 </script>
