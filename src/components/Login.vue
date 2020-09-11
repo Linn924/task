@@ -56,10 +56,15 @@ export default {
         //点击登录按钮
         login(){
              this.$refs.loginFormRef.validate( async valid => {
-                if(!valid) return
-                console.log(this.loginForm)
+                // if(!valid) return
+                // console.log(this.loginForm)
                 //表单置空
                 this.$refs.loginFormRef.resetFields()
+                if(this.loginForm.radio === '1'){
+                    this.$router.push('/admindex')
+                }else{
+                    this.$router.push('/userindex')
+                }
              })
         },
     },
