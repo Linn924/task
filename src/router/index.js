@@ -16,7 +16,7 @@ import addnews from '../components/admin/addnews.vue'
 Vue.use(VueRouter)
 
   const routes = [
-    { path:'/',redirect: '/admindex' },
+    { path:'/',redirect: '/login' },
     { path: '/login',component: Login },
     { path: '/userindex',component: userindex },
     { 

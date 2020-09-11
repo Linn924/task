@@ -54,17 +54,24 @@ export default {
   },
   methods: {
         //点击登录按钮
-        login(){
+        async login(){
              this.$refs.loginFormRef.validate( async valid => {
-                // if(!valid) return
-                // console.log(this.loginForm)
+                if(!valid) return
+                const {data:res} = await this.$http.get('/login',{
+                    params:{
+                        username:this.loginForm.username,
+                        password:this.loginForm.password
+                    }
+                })
                 //表单置空
                 this.$refs.loginFormRef.resetFields()
-                if(this.loginForm.radio === '1'){
-                    this.$router.push('/admindex')
-                }else{
-                    this.$router.push('/userindex')
-                }
+
+                console.log(res)
+                // if(this.loginForm.radio === '1'){
+                //     this.$router.push('/admindex')
+                // }else{
+                //     this.$router.push('/userindex')
+                // }
              })
         },
     },
