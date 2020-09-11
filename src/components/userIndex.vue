@@ -4,29 +4,29 @@
         <el-header class="header">Header</el-header>
         <el-container>
             <el-aside width="200px" class="aside">
-              <el-menu>
+              <el-menu router>
                 <el-submenu index="1">
                   <template slot="title">
                     <i class="el-icon-money"></i>
                     <span> 资金操作</span>
                   </template>
-                    <el-menu-item index="1-1">存款</el-menu-item>
-                    <el-menu-item index="1-2">取款</el-menu-item>
-                    <el-menu-item index="1-2">转账</el-menu-item>
+                    <el-menu-item index="/userindex/save">存款</el-menu-item>
+                    <el-menu-item index="/userindex/withdrawal">取款</el-menu-item>
+                    <el-menu-item index="/userindex/transfer">转账</el-menu-item>
                 </el-submenu>
-                <el-menu-item index="2">
+                <el-menu-item index="/userindex/information">
                   <i class="el-icon-user"></i>
                   <span slot="title">个人信息</span>
                 </el-menu-item>
-                <el-menu-item index="3">
+                <el-menu-item index="/userindex/modifypwd">
                   <i class="el-icon-lock"></i>
                   <span slot="title">修改密码</span>
                 </el-menu-item>
-                <el-menu-item index="4">
+                <el-menu-item index="/userindex/transaction">
                   <i class="el-icon-bank-card"></i>
                   <span slot="title">交易记录</span>
                 </el-menu-item>
-                <el-menu-item index="5">
+                <el-menu-item index="/userindex/allnews">
                   <i class="el-icon-date"></i>
                   <span slot="title">查看新闻</span>
                 </el-menu-item>
