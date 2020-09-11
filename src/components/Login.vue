@@ -60,18 +60,19 @@ export default {
                 const {data:res} = await this.$http.get('/login',{
                     params:{
                         username:this.loginForm.username,
-                        password:this.loginForm.password
+                        password:this.loginForm.password,
+                        identity:this.loginForm.radio
                     }
                 })
+                if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})
+                window.sessionStorage.setItem('id',res.id)
+                if(this.loginForm.radio === '1'){
+                    this.$router.push('/admindex')
+                }else{
+                    this.$router.push('/userindex')
+                }
                 //表单置空
                 this.$refs.loginFormRef.resetFields()
-
-                console.log(res)
-                // if(this.loginForm.radio === '1'){
-                //     this.$router.push('/admindex')
-                // }else{
-                //     this.$router.push('/userindex')
-                // }
              })
         },
     },

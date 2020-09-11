@@ -45,6 +45,9 @@ export default {
     return {
     }
   },
+  created(){
+    console.log(window.sessionStorage.getItem('id'))
+  }
 }
 </script>
 
