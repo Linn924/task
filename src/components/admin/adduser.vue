@@ -7,32 +7,32 @@
 
         <el-card>
             <el-form :model="userForm" ref="userFormRef" :rules="userFormRules" label-width="80px">
-                    <el-form-item label="username" prop='username'>
-                        <el-input v-model="userForm.username" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="password" prop='password'>
-                        <el-input type="password" v-model="userForm.password" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="email" prop='email'>
-                        <el-input v-model="userForm.email" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="money">
-                        <el-input v-model="userForm.money" clearable></el-input>
-                    </el-form-item>
-                     <el-form-item label="phone" prop='phone'>
-                        <el-input v-model="userForm.phone" clearable></el-input>
-                    </el-form-item>
-                    <el-form-item label="state">
-                        <el-select v-model="userForm.state" filterable allow-create placeholder="请选择状态">
-                            <el-option v-for="item in stateList" :key="item.id" :label="item.state" :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                     <el-form-item>
-                        <el-button type="primary" @click="adduser">立即开户</el-button>
-                        <el-button>取消</el-button>
-                    </el-form-item>
-                </el-form>
+                <el-form-item label="username" prop='username'>
+                    <el-input v-model="userForm.username" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="password" prop='password'>
+                    <el-input type="password" v-model="userForm.password" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="email" prop='email'>
+                    <el-input v-model="userForm.email" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="money">
+                    <el-input v-model="userForm.money" clearable></el-input>
+                </el-form-item>
+                    <el-form-item label="phone" prop='phone'>
+                    <el-input v-model="userForm.phone" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="state">
+                    <el-select v-model="userForm.state" filterable allow-create placeholder="请选择状态">
+                        <el-option v-for="item in stateList" :key="item.id" :label="item.state" :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                    <el-form-item>
+                    <el-button type="primary" @click="adduser">立即开户</el-button>
+                    <el-button>取消</el-button>
+                </el-form-item>
+            </el-form>
         </el-card>
     </section>
 </template>
@@ -93,11 +93,16 @@ export default {
         }
     },
     methods:{
-        adduser(){
+        async adduser(){
             this.$refs.userFormRef.validate( async valid => {
                 if(!valid) return
+                const {data:res} = await this.$http.post('/adduser',this.userForm)
+                if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})
+                this.$message({message: `${res.tips}`,type: 'success',duration:1000})
                 //表单置空
-                this.$refs.loginFormRef.resetFields()
+                this.$refs.userFormRef.resetFields()
+                this.userForm.money = ''
+                this.userForm.state = ''
              })
         }
     }

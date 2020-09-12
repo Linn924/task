@@ -13,6 +13,7 @@ import adduser from '../components/admin/adduser.vue'
 import modifypwd from '../components/admin/modifypwd.vue'
 import allnews from '../components/admin/allnews.vue'
 import addnews from '../components/admin/addnews.vue'
+import me from '../components/admin/me.vue'
 
 // 用户路由
 import transaction from '../components/user/transaction.vue'
@@ -52,6 +53,7 @@ Vue.use(VueRouter)
         {path:'/allnews',component:allnews},
         {path:'/addnews',component:addnews},
         {path:'/adduser',component:adduser},
+        {path:'/me',component:me},
       ] 
     },
   
