@@ -15,7 +15,7 @@
                     <el-input placeholder="查询账户" v-model="input" clearable></el-input>
                 </el-col>
                 <el-col :span="4">
-                    <el-button type="primary">搜索</el-button>
+                    <el-button type="primary" disabled>搜索</el-button>
                 </el-col>
             </el-row>
 
@@ -47,7 +47,7 @@
                 layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
 
-            <!-- 修改用户的对话框-->
+            <!-- 修改用户账号状态的对话框 -->
             <el-dialog
                 title="编辑用户"
                 :visible.sync="editDialogVisible"
@@ -92,15 +92,15 @@
 export default {
     data(){
         return {
-             userAccountList:[],
-            queryList:{//分页数据
+            userAccountList:[],//所有已冻结的账号信息
+            queryList:{//默认分页数据
                 pagenum:1,
                 pagesize:5,
                 state:'1'
             },
-            total:0,
+            total:0,//总数据量
             editDialogVisible:false,//隐藏对话框
-            userForm:{//账号信息
+            userForm:{//用户账号信息
                 username:'',
                 password:'',
                 email:'',
@@ -108,7 +108,7 @@ export default {
                 phone:'',
                 state:''
             },
-            stateList:[
+            stateList:[//账号状态可选值
                 {id:0,state:'启用'},
                 {id:1,state:'冻结'},
             ],
@@ -116,9 +116,10 @@ export default {
         }
     },
     created(){
-        this.getAllAccount()
+        this.getAllAccount()//页面加载完成前调用方法
     },
     methods:{
+        //获取所有已冻结账号
         async getAllAccount(){
             const {data:res} = await this.$http.get('/getusedaccount',{params:this.queryList})
             if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})
@@ -135,6 +136,7 @@ export default {
             this.queryList.pagenum = newNum
             this.getAllAccount()
         },
+        //编辑用户账号
         editAccount(data){
             this.editDialogVisible = true
             //深拷贝
@@ -142,6 +144,7 @@ export default {
             this.userForm = obj
             this.userForm.state = '冻结'
         },
+        //点击修改按钮
         async editUser(){
             if(!this.flag) return this.$message({message: '请做出修改',type: 'error',duration:1000})
             const {data:res} = await this.$http.post('/updateuser',this.userForm)
@@ -151,9 +154,11 @@ export default {
             this.editDialogVisible = false
             this.getAllAccount()
         },
+        //管理员选择修改用户账号状态触发此方法
         watchClick(){
             this.flag = true
         },
+        //点击删除按钮
         async deleteAccount(data){
             // 弹框询问用户是否删除数据
             const confirmResult = await this.$confirm(
@@ -165,7 +170,6 @@ export default {
             }).catch(err => err)
             // 如果用户确认删除，则返回值为字符串 confirm
             // 如果用户取消了删除，则返回值为字符串 cancel
-            // console.log(confirmResult)
             if (confirmResult !== 'confirm') return this.$message({message: '已取消删除',type: 'info',duration:1000})
             const {data:res} = await this.$http.get('/deleteuser',{params:{id:data.id}})
             if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})

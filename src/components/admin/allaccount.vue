@@ -9,13 +9,13 @@
         <!-- 卡牌视图区域 -->
         <el-card>
 
-            <!-- 搜索与添加区域 -->
+            <!-- 搜索与添加区域 搜索功能暂时不写-->
             <el-row :gutter="2">
                 <el-col :span="4">
                     <el-input placeholder="查询账户" v-model="input" clearable></el-input>
                 </el-col>
                 <el-col :span="4">
-                    <el-button type="primary">搜索</el-button>
+                    <el-button type="primary" disabled>搜索</el-button>
                 </el-col>
             </el-row>
 
@@ -50,19 +50,19 @@
 export default {
     data(){
         return {
-            userAccountList:[],
-            queryList:{//分页数据
+            userAccountList:[],//所有账号信息
+            queryList:{//默认传递的分页数据
                 pagenum:1,
-                pagesize:5,
-                key:''
+                pagesize:5
             },
-            total:0
+            total:0//默认账号总数量
         }
     },
     created(){
-        this.getAllAccount()
+        this.getAllAccount()//页面加载完成前调用获取数据方法
     },
     methods:{
+        //获取所有账号信息
         async getAllAccount(){
             const {data:res} = await this.$http.get('/getalluser',{params:this.queryList})
             if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})

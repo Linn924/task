@@ -15,7 +15,7 @@
                     <el-input placeholder="查看新闻" v-model="input" clearable></el-input>
                 </el-col>
                 <el-col :span="4">
-                    <el-button type="primary">搜索</el-button>
+                    <el-button type="primary" disabled>搜索</el-button>
                 </el-col>
             </el-row>
 
@@ -26,12 +26,6 @@
                 <el-table-column label="content" prop="content"></el-table-column>
                 <el-table-column label="publishtime" prop="publishtime"></el-table-column>
                 <el-table-column label="author" prop="author"></el-table-column>
-                <!-- <el-table-column label="operate" width="180px">
-                    <template slot-scope="scope">
-                        <el-button type="primary" icon="el-icon-edit" size="mini" @click="editnews(scope.row)"></el-button>
-                        <el-button type="danger" icon="el-icon-delete" size="mini" @click="deletenews(scope.row)"></el-button>
-                    </template>
-                </el-table-column> -->
             </el-table>
 
             <!-- 分页区域-->
