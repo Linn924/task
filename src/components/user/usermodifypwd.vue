@@ -6,7 +6,7 @@
         </el-breadcrumb>
 
         <el-card>
-            <el-form :model="pwdForm" :rules="pwdFormRules" ref="pwdFormRef" label-width="80px">
+            <el-form :model="pwdForm" :rules="pwdFormRules" ref="form" label-width="80px">
                     <el-form-item label="password" prop='password'>
                         <el-input type="password" v-model="pwdForm.password" clearable></el-input>
                     </el-form-item>
@@ -29,7 +29,7 @@ export default {
             if (this.pwdForm.password === this.pwdForm.checkpwd) {   
                 return cb()
             }
-            cb(new Error('密码错误'))
+            cb(new Error('密码不一致'))
         }
         return {
             pwdForm:{
@@ -49,9 +49,36 @@ export default {
         }
     },
     methods:{
-        modifypwd(){
+        async modifypwd(){
+            let flag = false
+             this.$refs.form.validate((valid) => {
+                if (!valid) {
+                    this.$message.error('您的输入有误')
+                    flag = true
+                }
+            });
+            if(flag) return 0
 
+            let data = {}
+            data.id = this.id
+            data.pwd = this.pwdForm.password
+
+            try {
+                let {data:res} = await axios.post('/usermidifypwd',data)
+                if(res.code===200){
+                    this.$message.success('修改密码成功');
+                    this.pwdForm = {}
+                }else{
+                    this.$message.error('修改密码失败');
+                }
+            } catch(err) {
+                this.$message.error('修改密码失败');
+            }
         }
+    },
+    created(){
+        let id= window.sessionStorage.getItem("id")
+        this.id = id    
     }
 }
 </script>

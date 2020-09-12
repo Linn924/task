@@ -1,7 +1,9 @@
 <template>
   <div class="box">
     <el-container class="container">
-        <el-header class="header">Header</el-header>
+        <el-header class="header">
+          <my-loginout></my-loginout>
+        </el-header>
         <el-container>
             <el-aside width="200px" class="aside">
               <el-menu :default-openeds="['1', '4']">
@@ -43,7 +45,12 @@
 </template>
 
 <script>
+import loginout from './loginout'
+
 export default {
+  components:{
+      'my-loginout':loginout
+  },
   data() {
     return {
     }
@@ -57,6 +64,7 @@ export default {
 }
 .header{
     border-bottom: 1px solid #eee;
+    text-align: right;
 }
 .aside{
     height: 100%;

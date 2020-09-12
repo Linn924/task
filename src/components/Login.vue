@@ -60,8 +60,9 @@ export default {
                 const {data:res} = await this.$http.get('/login',{params:this.loginForm})
                 if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})
                 this.$message({message: `${res.tips}`,type: 'success',duration:1000})
-                //把用户ID保存到sessionStorage中
+                //把用户信息保存到sessionStorage中
                 window.sessionStorage.setItem('id',res.id)
+                window.sessionStorage.setItem('username',this.loginForm.username)
                 if(this.loginForm.radio === '1'){
                     this.$router.push('/admindex')
                 }else{

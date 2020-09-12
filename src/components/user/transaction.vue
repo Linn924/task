@@ -8,16 +8,6 @@
         <!-- 卡牌视图区域 -->
         <el-card>
 
-            <!-- 搜索与添加区域 -->
-            <el-row :gutter="2">
-                <el-col :span="4">
-                    <el-input placeholder="查询记录" v-model="input" clearable></el-input>
-                </el-col>
-                <el-col :span="4">
-                    <el-button type="primary">搜索</el-button>
-                </el-col>
-            </el-row>
-
             <!-- 表格中的数据 -->
             <el-table border stripe :data="transactionArr">
                 <el-table-column label="#" type="index"></el-table-column>
@@ -27,9 +17,9 @@
                         {{scope.row.state | toMystate}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="toname" label="转账用户">
+                <el-table-column prop="username" label="相关用户">
                     <template slot-scope="scope">
-                        {{scope.row.toname | toName}}
+                        {{scope.row.username | toName}}
                     </template>
                 </el-table-column>
                 <el-table-column prop="time" label="日期">
@@ -41,10 +31,10 @@
             </el-table>
 
             <!-- 分页区域-->
-            <!-- <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                :current-page="queryList.pagenum" :page-sizes="[3, 5, 8]" :page-size="queryList.pagesize"
+            <el-pagination @size-change="pageSizeChange" @current-change="pageCurrentChange"
+                :current-page="currentPage" :page-sizes="[3, 5, 8]" :page-size="pagesize"
                 layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination> -->
+            </el-pagination>
 
         </el-card>
 
@@ -55,7 +45,10 @@
 export default {
     data(){
         return {
-            transactionArr:[]
+            transactionArr:[],
+            currentPage:1,
+            pagesize:5,
+            total:'',
         }
     },
     filters: {
@@ -70,19 +63,22 @@ export default {
                 state = '存款'
             }else if(value==1){
                 state = '取款'
-            }else{
+            }else if(value==2){
                 state = '转账'
+            }else{
+                state = '收款'
             }
             return state
         },
         toName: function(value) {
             if (!value) return '-'
+            else return value
         }
     },
     methods:{
-        async getTransaction(){
+        async getTransaction(currentPage,pageSize){
             try {
-                let {data:res} = await axios.get(`/getusertransaction/${this.id}`)
+                let {data:res} = await axios.get(`/getusertransaction/${this.id}/${currentPage}/${pageSize}`)
                 if(res.code!==200){
                     this.$message.error('获取交易记录失败');
                 }
@@ -90,12 +86,33 @@ export default {
             } catch(err) {
                 this.$message.error('获取交易记录失败');
             }
+        },
+        // 获取记录总数
+        async getCount(){
+            try {
+                let {data:res} = await axios.get(`/getcountusertransaction/${this.id}`)
+                this.total = res.rs
+            } catch(err) {
+                this.$message.error('获取交易记录失败');
+            }
+        },
+        // 每页容量改变时触发
+        pageSizeChange(val){
+            this.pagesize = val
+            this.getTransaction(this.currentPage,this.pagesize)
+        },
+        // 页码改变时触发
+        pageCurrentChange(val){
+            this.currentPage = val
+            this.getTransaction(this.currentPage,this.pagesize)
+
         }
     },
     created(){
         let id= window.sessionStorage.getItem("id")
         this.id = id    
-        this.getTransaction()
+        this.getCount()
+        this.getTransaction(this.currentPage,this.pagesize)
     }
 }
 </script>

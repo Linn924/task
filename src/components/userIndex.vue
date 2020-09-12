@@ -1,10 +1,12 @@
 <template>
   <div class="box">
     <el-container class="container">
-        <el-header class="header">Header</el-header>
+        <el-header class="header">
+          <my-loginout></my-loginout>
+        </el-header>
         <el-container>
             <el-aside width="200px" class="aside">
-              <el-menu router>
+              <el-menu router :default-active='defaultActive'>
                 <el-submenu index="1">
                   <template slot="title">
                     <i class="el-icon-money"></i>
@@ -41,12 +43,20 @@
 </template>
 
 <script>
+import loginout from './loginout'
+
 export default {
+  components:{
+      'my-loginout':loginout
+  },
   data() {
     return {
-        
+        defaultActive: ''
     }
   },
+  created(){
+      this.defaultActive = this.$router.history.current.path
+  }
 }
 </script>
 
@@ -56,6 +66,7 @@ export default {
 }
 .header{
     border-bottom: 1px solid #eee;
+    text-align: right;
 }
 .aside{
     height: 100%;

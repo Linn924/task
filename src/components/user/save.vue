@@ -8,9 +8,9 @@
 
         <!-- 卡牌视图区域 -->
         <el-card>
-            <el-form ref="form" :model="form" label-width="80px">
-                <el-form-item label="金额">
-                    <el-input v-model="form.money"></el-input>
+            <el-form ref="form" :model="form" label-width="80px" :rules="rules">
+                <el-form-item label="金额" prop="money">
+                    <el-input v-model.number="form.money"></el-input>
                 </el-form-item>
                 <el-button type="primary" @click="onSubmit">存入</el-button>
             </el-form>
@@ -24,10 +24,24 @@ export default {
         return {
             form:{},
             id:0,
+            rules: {
+                money: [
+                    { type: 'number', message: '金额必须为数字值'}
+                ]
+            }
         }
     },
     methods:{
         async onSubmit(){
+            let flag = false
+             this.$refs.form.validate((valid) => {
+                if (!valid) {
+                    this.$message.error('您的输入有误')
+                    flag = true
+                }
+            });
+            if(flag) return 0
+
             let data = {}
             data.id = this.id
             data.money = this.form.money

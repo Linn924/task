@@ -31,6 +31,7 @@ Vue.use(VueRouter)
     { path: '/login',component: Login },
     { 
       path: '/userindex',
+      redirect: '/userindex/information',
       component: userindex,
       children:[
         {path:'/userindex/transaction',component:transaction},
@@ -58,9 +59,18 @@ Vue.use(VueRouter)
     },
   
 ]
-  
+
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to,from,next)=>{
+
+  if(to.path==='/login') return next()
+  // 获取登录凭证
+  const id =  window.sessionStorage.getItem('id')
+  if(!id) return next('/login')
+  next()
 })
 
 export default router
