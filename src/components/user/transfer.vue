@@ -47,11 +47,15 @@ export default {
 
             this.form.id = this.id
 
-            let touserid = await this.findToUser(this.form.toname)
-            if(!touserid){
+            let touser = await this.findToUser(this.form.toname)
+            if(!touser){
                 return this.$message.error('验证用户失败，请检查你的转账用户')
             }
-            this.form.toid = touserid
+            if(touser.touserstate == 1){
+                return this.$message.error('此用户已被冻结，无法转账')
+            }
+            this.form.toid = touser.touserid
+            console.log(this.form)
             try {
                 let {data:res} = await axios.post('/transfer',this.form)
                 if(res.code===200){
@@ -70,7 +74,7 @@ export default {
             try{
                 let {data:res} = await axios.get(`/checktouser/${username}`)
                 if(res.code===200){
-                    id = res.touserid
+                    id = res
                 }
             }catch(err){}
             return id
