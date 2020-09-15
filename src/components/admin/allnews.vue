@@ -26,6 +26,12 @@
                 <el-table-column label="content" prop="content"></el-table-column>
                 <el-table-column label="publishtime" prop="publishtime"></el-table-column>
                 <el-table-column label="author" prop="author"></el-table-column>
+                <el-table-column label="operate" width="180px">
+                    <template slot-scope="scope">
+                        <el-button type="primary" icon="el-icon-edit" size="mini" @click="editNews(scope.row)"></el-button>
+                        <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteNews(scope.row)"></el-button>
+                    </template>
+                </el-table-column>
             </el-table>
 
             <!-- 分页区域-->
@@ -35,6 +41,33 @@
             </el-pagination>
 
         </el-card>
+
+        <!-- 修改用户账号状态的对话框 -->
+        <el-dialog
+            title="编辑新闻"
+            :visible.sync="editDialogVisible"
+            width="50%" @close="editDialogClosed">
+            <!-- 内容主题区域 disabled 禁用-->
+            <el-form :model="newsForm" label-width="80px">
+                <el-form-item label="title" prop='title'>
+                    <el-input v-model="newsForm.title"></el-input>
+                </el-form-item>
+                <el-form-item label="content" prop='content'>
+                    <el-input type="textarea" v-model="newsForm.content"></el-input>
+                </el-form-item>
+                <el-form-item label="time" prop='publishtime'>
+                    <el-date-picker type="date" placeholder="选择日期" v-model="newsForm.publishtime" style="width: 100%;"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="author">
+                    <el-input v-model="newsForm.author"></el-input>
+                </el-form-item>
+            </el-form>
+            <!-- 底部区域 -->
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editAdmin">修改</el-button>
+            </span>
+        </el-dialog>
 
     </section>
 </template>
@@ -48,7 +81,18 @@ export default {
                 pagenum:1,
                 pagesize:5
             },
-            total:0
+            total:0,
+            newsForm:{
+                title:'',
+                content:'',
+                publishtime:'',
+                author:''
+            },
+            editDialogVisible:false,
+            flag:false,
+            form:{//与修改的newForm对比
+
+            }
         }
     },
     created(){
@@ -71,6 +115,39 @@ export default {
             this.queryList.pagenum = newNum
             this.getAllNews()
         },
+        editNews(data){
+            this.editDialogVisible = true
+            this.form = data
+            var obj = Object.assign({}, data)
+            this.newsForm = obj
+            
+        },
+        async editAdmin(){
+            if(JSON.stringify(this.form) === JSON.stringify(this.newsForm)) 
+            return this.$message({message: '请做出修改',type: 'error',duration:1000})
+            const {data:res} = await this.$http.post('updatenews',this.newsForm)
+            if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})
+            this.$message({message: `${res.tips}`,type: 'success',duration:1000})
+            this.editDialogVisible = false
+            this.getAllNews()
+        },
+        async deleteNews(data){
+            // 弹框询问用户是否删除数据
+            const confirmResult = await this.$confirm(
+            '此操作将永久删除该用户, 是否继续?','提示',
+            {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).catch(err => err)
+            // 如果用户确认删除，则返回值为字符串 confirm
+            // 如果用户取消了删除，则返回值为字符串 cancel
+            if (confirmResult !== 'confirm') return this.$message({message: '已取消删除',type: 'info',duration:1000})
+            const {data:res} = await this.$http.get('/deletenews',{params:{id:data.id}})
+            if(res.code != 200) return this.$message({message: `${res.tips}`,type: 'error',duration:1000})
+            this.$message({message: `${res.tips}`,type: 'success',duration:1000})
+            this.getAllNews()
+        }
     }
 }
 </script>

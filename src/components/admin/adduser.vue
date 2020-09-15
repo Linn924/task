@@ -28,9 +28,8 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                    <el-form-item>
+                <el-form-item>
                     <el-button type="primary" @click="adduser">立即开户</el-button>
-                    <el-button>取消</el-button>
                 </el-form-item>
             </el-form>
         </el-card>

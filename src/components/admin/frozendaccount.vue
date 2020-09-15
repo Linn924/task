@@ -66,7 +66,7 @@
                     <el-form-item label="money">
                         <el-input v-model="userForm.money" disabled></el-input>
                     </el-form-item>
-                        <el-form-item label="phone" prop='phone'>
+                    <el-form-item label="phone" prop='phone'>
                         <el-input v-model="userForm.phone" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="state">
