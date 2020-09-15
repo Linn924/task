@@ -2,6 +2,7 @@
   <div class="box">
     <el-container class="container">
         <el-header class="header">
+          <span class="logo">个人资金账户管理系统</span>
           <my-loginout></my-loginout>
         </el-header>
         <el-container>
@@ -64,7 +65,12 @@ export default {
 }
 .header{
     border-bottom: 1px solid #eee;
-    text-align: right;
+    display: flex;
+    justify-content: space-between;
+}
+.logo{
+  line-height: 59px;
+  font-size: 22px;
 }
 .aside{
     height: 100%;

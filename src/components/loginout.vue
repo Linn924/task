@@ -1,8 +1,8 @@
 <template>
-    <section>
+    <span>
         <span class="loginout-title">欢迎，{{username}}</span>
         <el-button size="mini" class="loginout-btn" @click="loginout">登出</el-button>
-    </section>
+    </span>
 </template>
 
 <script>
